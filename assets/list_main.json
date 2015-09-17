@@ -1,0 +1,11 @@
+{
+	"images": [
+	],
+	"atlases": [
+		{
+			"key": "atlasRats",
+			"url": "assets/gfx/atlases/rats.png",
+			"cfg_url": "assets/gfx/atlases/rats.json"
+		}
+	]
+}

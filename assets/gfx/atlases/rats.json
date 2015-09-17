@@ -1,0 +1,122 @@
+{
+"frames": [
+	{
+		"filename": "baby_e.png",
+		"frame": {"x":0, "y":55, "w":18, "h":8},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":18,"h":8},
+		"sourceSize": {"w":18,"h":8}
+	},
+	{
+		"filename": "baby_n.png",
+		"frame": {"x":43, "y":42, "w":8, "h":17},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":8,"h":17},
+		"sourceSize": {"w":8,"h":17}
+	},
+	{
+		"filename": "baby_s.png",
+		"frame": {"x":52, "y":42, "w":8, "h":17},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":8,"h":17},
+		"sourceSize": {"w":8,"h":17}
+	},
+	{
+		"filename": "baby_w.png",
+		"frame": {"x":19, "y":55, "w":18, "h":8},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":18,"h":8},
+		"sourceSize": {"w":18,"h":8}
+	},
+	{
+		"filename": "female_e.png",
+		"frame": {"x":21, "y":0, "w":20, "h":10},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":10},
+		"sourceSize": {"w":20,"h":10}
+	},
+	{
+		"filename": "female_n.png",
+		"frame": {"x":32, "y":11, "w":10, "h":20},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":10,"h":20},
+		"sourceSize": {"w":10,"h":20}
+	},
+	{
+		"filename": "female_s.png",
+		"frame": {"x":43, "y":21, "w":10, "h":20},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":10,"h":20},
+		"sourceSize": {"w":10,"h":20}
+	},
+	{
+		"filename": "female_w.png",
+		"frame": {"x":0, "y":22, "w":20, "h":10},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":10},
+		"sourceSize": {"w":20,"h":10}
+	},
+	{
+		"filename": "killer_e.png",
+		"frame": {"x":0, "y":11, "w":20, "h":10},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":10},
+		"sourceSize": {"w":20,"h":10}
+	},
+	{
+		"filename": "killer_n.png",
+		"frame": {"x":21, "y":32, "w":10, "h":20},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":10,"h":20},
+		"sourceSize": {"w":10,"h":20}
+	},
+	{
+		"filename": "killer_s.png",
+		"frame": {"x":32, "y":32, "w":10, "h":20},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":10,"h":20},
+		"sourceSize": {"w":10,"h":20}
+	},
+	{
+		"filename": "killer_w.png",
+		"frame": {"x":0, "y":44, "w":20, "h":10},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":10},
+		"sourceSize": {"w":20,"h":10}
+	},
+	{
+		"filename": "male_e.png",
+		"frame": {"x":0, "y":33, "w":20, "h":10},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":10},
+		"sourceSize": {"w":20,"h":10}
+	},
+	{
+		"filename": "male_n.png",
+		"frame": {"x":43, "y":0, "w":10, "h":20},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":10,"h":20},
+		"sourceSize": {"w":10,"h":20}
+	},
+	{
+		"filename": "male_s.png",
+		"frame": {"x":21, "y":11, "w":10, "h":20},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":10,"h":20},
+		"sourceSize": {"w":10,"h":20}
+	},
+	{
+		"filename": "male_w.png",
+		"frame": {"x":0, "y":0, "w":20, "h":10},
+		"trimmed": true,
+		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":10},
+		"sourceSize": {"w":20,"h":10}
+	}
+
+],
+"meta": {
+	"image": "sprites.png",
+	"size": {"w": 61, "h": 64},
+	"scale": "1"
+}
+}

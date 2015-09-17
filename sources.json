@@ -1,0 +1,7 @@
+[
+	"src/classes/gameobject.js",
+	"src/classes/rat.js",
+	"src/states/state_boot.js",
+	"src/states/state_game.js",
+	"src/game.js"
+]
