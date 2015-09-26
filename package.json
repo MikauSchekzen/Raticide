@@ -4,5 +4,6 @@
   "main": "main.js",
   "devDependencies": {
     "electron": "^0.4.1"
-  }
+  },
+  "private": true
 }
