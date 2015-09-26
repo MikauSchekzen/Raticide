@@ -9,8 +9,8 @@ var GameData = {
 		}
 	},
 	tile: {
-		width: 16,
-		height: 16
+		width: 24,
+		height: 24
 	},
 	dir: {
 		base: {
@@ -68,12 +68,15 @@ dbTileset.prototype.loadFiles = function() {
 	Gets a rectangle for the tile's cropping
 */
 dbTileset.prototype.getTileCropping = function(tileX, tileY) {
-	return new Phaser.Rectangle(
-		this.rawData.margin + (tileX * (this.rawData.tilewidth + this.rawData.spacing)),
-		this.rawData.margin + (tileY * (this.rawData.tileheight + this.rawData.spacing)),
+	var margin = this.rawData.margin,
+	    spacing = this.rawData.spacing;
+	var result = new Phaser.Rectangle(
+		margin + (tileX * (this.rawData.tilewidth + spacing)),
+		margin + (tileY * (this.rawData.tileheight + spacing)),
 		this.rawData.tilewidth,
 		this.rawData.tileheight
 	);
+	return result;
 };
 var Level = function(levelObj) {
 	Phaser.Sprite.call(this, game, 0, 0);
@@ -209,8 +212,12 @@ TileLayer.prototype.getIndexFromPos = function(x, y) {
 	Places a tile
 */
 TileLayer.prototype.placeTile = function(x, y, tileset, tileID) {
+	var tilePos = {
+		x: (tileID % tileset.hTileCount),
+		y: Math.floor(tileID / tileset.hTileCount)
+	};
 	var index = this.getIndexFromPos(x, y);
-	var tile = new Tile(x, y, tileset, tileID);
+	var tile = new Tile(x, y, tileset, tilePos.x, tilePos.y);
 	this.addChild(tile);
 	this.tiles.splice(index, 1, tile);
 };
@@ -286,6 +293,19 @@ var Rat = function(game, x, y, gender, age) {
 		gender: gender
 	};
 
+	Object.defineProperties(this, {
+		"adult": {
+			get() {
+				return this.age >= Rat.AGE_OF_CONSENT;
+			}
+		},
+		"pregnant": {
+			get() {
+				return this.stats.gender == Rat.GENDER_FEMALE && this.stats.pregnancy.pregnant;
+			}
+		}
+	});
+
 	// Gender specific initialization
 	switch (this.stats.gender) {
 		case Rat.GENDER_FEMALE:
@@ -317,6 +337,7 @@ Rat.prototype.constructor = Rat;
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
 Rat.AGE_OF_CONSENT = 1200;
+
 var bootState = {
 	/*
 	method: preload
@@ -433,7 +454,7 @@ gameState.create = function() {
 	this.level.initLevel();
 	this.level.scale.set(2);
 };
-var game = new Phaser.Game(800, 600, Phaser.AUTO, "content", null);
+var game = new Phaser.Game(800, 600, Phaser.AUTO, "content", null, false, false);
 
 game.state.add("boot", bootState);
 game.state.add("game", gameState);

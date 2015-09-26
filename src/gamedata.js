@@ -8,8 +8,12 @@ var GameData = {
 		}
 	},
 	tile: {
-		width: 16,
-		height: 16
+		width: 24,
+		height: 24,
+		type: {
+			PATH: 0,
+			WALL: 1
+		}
 	},
 	dir: {
 		base: {

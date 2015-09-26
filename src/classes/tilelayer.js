@@ -57,8 +57,16 @@ TileLayer.prototype.getIndexFromPos = function(x, y) {
 	Places a tile
 */
 TileLayer.prototype.placeTile = function(x, y, tileset, tileID) {
+	// Determine data
+	var tilePos = {
+		x: (tileID % tileset.hTileCount),
+		y: Math.floor(tileID / tileset.hTileCount)
+	};
 	var index = this.getIndexFromPos(x, y);
-	var tile = new Tile(x, y, tileset, tileID);
+	// Place tile
+	var tile = new Tile(x, y, tileset, tilePos.x, tilePos.y);
 	this.addChild(tile);
 	this.tiles.splice(index, 1, tile);
+	// Get tile properties
+	// if(tileset.rawData.)
 };

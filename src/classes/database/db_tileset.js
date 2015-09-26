@@ -48,10 +48,13 @@ dbTileset.prototype.loadFiles = function() {
 	Gets a rectangle for the tile's cropping
 */
 dbTileset.prototype.getTileCropping = function(tileX, tileY) {
-	return new Phaser.Rectangle(
-		this.rawData.margin + (tileX * (this.rawData.tilewidth + this.rawData.spacing)),
-		this.rawData.margin + (tileY * (this.rawData.tileheight + this.rawData.spacing)),
+	var margin = this.rawData.margin,
+	    spacing = this.rawData.spacing;
+	var result = new Phaser.Rectangle(
+		margin + (tileX * (this.rawData.tilewidth + spacing)),
+		margin + (tileY * (this.rawData.tileheight + spacing)),
 		this.rawData.tilewidth,
 		this.rawData.tileheight
 	);
+	return result;
 };
