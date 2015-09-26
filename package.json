@@ -1,10 +1,27 @@
 {
   "name": "raticide",
   "version": "0.0.1",
+  "author": "Tijmen Bok <mikauschekzen@gmail.com>",
+  "contributors": [
+    "Jasper Bok <hello@jasperbok.nl> (http://jasperbok.nl)"
+  ],
+  "description": "A small game where you exterminate rats",
   "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
   "devDependencies": {
     "electron": "^0.4.1",
     "grunt": "^0.4.5"
   },
-  "private": true
+  "keywords": ["game", "rats", "pest", "kill"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MikauSchekzen/Raticide"
+  },
+  "bugs": {
+    "url": "https://github.com/MikauSchekzen/Raticide/issues"
+  },
+  "private": true,
+  "license": "MIT"
 }
