@@ -1,4 +1,230 @@
 (function(Phaser) {
+"use strict";
+
+var GameData = {
+	db: {
+		tilesets: {
+			data: [],
+			resrefs: {}
+		}
+	},
+	tile: {
+		width: 16,
+		height: 16
+	},
+	dir: {
+		base: {
+			tilesets: "assets/gfx/tilesets/"
+		}
+	}
+};
+var dbTileset = function(tilesetObj) {
+	// Set raw data
+	this.rawData = tilesetObj;
+
+	// Define object properties
+	Object.defineProperties(this, {
+		"key": {
+			get() {
+				return this.rawData.name;
+			}
+		},
+		"url": {
+			get() {
+				return GameData.dir.base.tilesets + this.rawData.image.match(/(\w+\.[\w]{3,5})$/)[1];
+			}
+		},
+		"hTileCount": {
+			get() {
+				return ~~(this.rawData.imagewidth / (this.rawData.tilewidth + this.rawData.spacing));
+			}
+		},
+		"vTileCount": {
+			get() {
+				return ~~(this.rawData.imageheight / (this.rawData.tileheight + this.rawData.spacing));
+			}
+		}
+	});
+
+	// Add to database
+	this.resref = this.key;
+	GameData.db.tilesets.data.push(this);
+	GameData.db.tilesets.resrefs[this.resref] = this;
+};
+dbTileset.prototype.constructor = dbTileset;
+
+/*
+	method: loadFiles
+	Adds this tileset's required files to the loader
+*/
+dbTileset.prototype.loadFiles = function() {
+	if(this.rawData.image) {
+		game.load.image(this.key, this.url);
+	}
+};
+
+/*
+	method: getTileCropping(tileX, tileY)
+	Gets a rectangle for the tile's cropping
+*/
+dbTileset.prototype.getTileCropping = function(tileX, tileY) {
+	return new Phaser.Rectangle(
+		this.rawData.margin + (tileX * (this.rawData.tilewidth + this.rawData.spacing)),
+		this.rawData.margin + (tileY * (this.rawData.tileheight + this.rawData.spacing)),
+		this.rawData.tilewidth,
+		this.rawData.tileheight
+	);
+};
+var Level = function(levelObj) {
+	Phaser.Sprite.call(this, game, 0, 0);
+	game.add.existing(this);
+
+	this.rawData = levelObj;
+
+	// Set up layer data
+	this.layers = {
+		tiles: null,
+		overlay: null
+	};
+
+	// Define properties
+	Object.defineProperties(this, {
+		"width": {
+			get() {
+				return this.rawData.width;
+			}
+		},
+		"height": {
+			get() {
+				return this.rawData.height;
+			}
+		}
+	})
+};
+Level.prototype = Object.create(Phaser.Sprite.prototype);
+Level.prototype.constructor = Level;
+
+/*
+	method: loadLevelFiles
+	Loads all the required level files (tilesets and audio, mostly)
+*/
+Level.prototype.loadLevelFiles = function() {
+	var a, ts, tsObj;
+	// Get data from tilesets
+	for(a = 0;a < this.rawData.tilesets.length;a++) {
+		tsObj = this.rawData.tilesets[a];
+		if(tsObj.image) {
+			ts = new dbTileset(tsObj);
+			ts.loadFiles();
+		}
+	}
+};
+
+/*
+	method: initLevel
+	Creates this level's layers etc
+*/
+Level.prototype.initLevel = function() {
+	var a, layer;
+	// Create layers
+	for(a = 0;a < this.rawData.layers.length;a++) {
+		layer = this.rawData.layers[a];
+		if(layer.type === "tilelayer") {
+			switch(layer.name) {
+				case "tiles":
+					this.layers.tiles = new TileLayer(layer, this);
+					break;
+				case "overlay":
+					this.layers.overlay = new TileLayer(layer, this);
+					break;
+			}
+		}
+	}
+
+	// Initialize layers
+	for(a in this.layers) {
+		layer = this.layers[a];
+		if(layer) {
+			this.addChild(layer);
+			layer.placeTiles();
+		}
+	}
+};
+var TileLayer = function(rawData, level) {
+	Phaser.Sprite.call(this, game, 0, 0);
+	game.add.existing(this);
+
+	this.rawData = rawData;
+	this.map = level;
+	this.tiles = [];
+	while(this.tiles.length < this.map.width * this.map.height) {
+		this.tiles.push(null);
+	}
+};
+TileLayer.prototype = Object.create(Phaser.Sprite.prototype);
+TileLayer.prototype.constructor = TileLayer;
+
+/*
+	method: placeTiles
+	Places this layer's tiles
+*/
+TileLayer.prototype.placeTiles = function() {
+	var a, b, gid, tid, ts, stopQuery, tempPos;
+	for(a = 0;a < this.rawData.data.length;a++) {
+		gid = this.rawData.data[a];
+		stopQuery = false;
+		for(b = 0;b < GameData.db.tilesets.data.length && !stopQuery;b++) {
+			ts = GameData.db.tilesets.data[b];
+			if(gid >= ts.rawData.firstgid && gid <= ts.rawData.firstgid + ts.rawData.tilecount) {
+				tid = gid - ts.rawData.firstgid;
+				stopQuery = true;
+				tempPos = this.getPosFromIndex(a);
+				this.placeTile(tempPos.x, tempPos.y, ts, tid);
+			}
+		}
+	}
+};
+
+/*
+	method: getPosFromIndex(index)
+	Returns a tile position object(with x and y values) from an index
+*/
+TileLayer.prototype.getPosFromIndex = function(index) {
+	return {
+		x: (index % this.map.width),
+		y: Math.floor(index / this.map.width)
+	};
+};
+
+/*
+	method: getIndexFromPos(x, y)
+	Returns a tile index from coordinates
+*/
+TileLayer.prototype.getIndexFromPos = function(x, y) {
+	return x + (y * this.map.width);
+};
+
+/*
+	method: placeTile(x, y, tileset, tileID)
+	Places a tile
+*/
+TileLayer.prototype.placeTile = function(x, y, tileset, tileID) {
+	var index = this.getIndexFromPos(x, y);
+	var tile = new Tile(x, y, tileset, tileID);
+	this.addChild(tile);
+	this.tiles.splice(index, 1, tile);
+};
+var Tile = function(tileX, tileY, tileset, tilesetX, tilesetY) {
+	Phaser.Sprite.call(this, game, tileX * GameData.tile.width, tileY * GameData.tile.height, tileset.key);
+	game.add.existing(this);
+
+	this.tileset = tileset;
+
+	// Auto-crop
+	this.crop(this.tileset.getTileCropping(tilesetX, tilesetY));
+};
+Tile.prototype = Object.create(Phaser.Sprite.prototype);
+Tile.prototype.constructor = Tile;
 var GameObject = function(game, x, y, imageKey) {
 	// Inherit Phaser.Sprite
 	Phaser.Sprite.call(this, game, x, y, imageKey);
@@ -108,8 +334,11 @@ var bootState = {
 	*/
 	create: function() {
 		// Initialize load event
-		game.load.onFileComplete.add(function(progress, key, success, totalLoadedFiles, totalFiles) {
-			game.state.start("game");
+		game.load.onFileComplete.add(function loadProgress(progress, key, success, totalLoadedFiles, totalFiles) {
+			if(totalLoadedFiles >= totalFiles) {
+				game.load.onFileComplete.remove(loadProgress, this);
+				game.state.start("loadingscreen", true, false, "assets/levels/testlevel.json");
+			}
 		}, this);
 
 		// Prepare list
@@ -141,34 +370,74 @@ var bootState = {
 		game.load.start();
 	}
 };
-var gameState = {
-	/*
-		method: preload
-		Preloads the level stuff
-	*/
-	preload: function() {
-		// Initialize level groups
-		this.initGroups();
+var loadingScreenState = new Phaser.State();
 
-		// Rat test
-		var rat = new Rat(game, 40, 40, Rat.GENDER_MALE, Rat.AGE_OF_CONSENT);
-		this.levelGroup.add(rat);
-		rat = new Rat(game, 80, 40, Rat.GENDER_FEMALE, Rat.AGE_OF_CONSENT);
-		this.levelGroup.add(rat);
-	},
+/*
+	method: init(levelUrl)
+	Sets basic data of this state
+*/
+loadingScreenState.init = function(levelUrl) {
+	this.levelUrl = levelUrl;
+};
 
-	/*
-		method: initGroups
-		Initializes this state's groups (for game objects)
-	*/
-	initGroups: function() {
-		this.levelGroup = new Phaser.Group(game);
-	}
+/*
+	method: create
+	Starts loading the level
+*/
+loadingScreenState.create = function() {
+	game.load.onFileComplete.add(function loadProgress(progress, fileKey, success, totalLoadedFiles, totalFiles) {
+		if(totalLoadedFiles >= totalFiles) {
+			game.load.onFileComplete.remove(loadProgress, this);
+			this.loadAssets();
+		}
+	}, this);
+
+	game.load.json("level", this.levelUrl);
+	game.load.start();
+};
+
+/*
+	method: loadAssets
+	Loads the level's assets
+*/
+loadingScreenState.loadAssets = function() {
+	// Create level
+	var levelObj = game.cache.getJSON("level");
+	var level = new Level(levelObj);
+	level.loadLevelFiles();
+
+	// Add file load callback
+	game.load.onFileComplete.add(function loadProgress(progress, fileKey, success, totalLoadedFiles, totalFiles) {
+		if(totalLoadedFiles >= totalFiles) {
+			game.load.onFileComplete.remove(loadProgress, this);
+			game.state.start("game", false, false, level);
+		}
+	}, this);
+};
+var gameState = new Phaser.State();
+
+/*
+	method: init(level)
+	Initializes the level's data
+*/
+gameState.init = function(level) {
+	this.level = level;
+};
+
+/*
+	method: create
+	Starts the level
+*/
+gameState.create = function() {
+	// Initialize the level group (for zooming)
+	this.level.initLevel();
+	this.level.scale.set(2);
 };
 var game = new Phaser.Game(800, 600, Phaser.AUTO, "content", null);
 
 game.state.add("boot", bootState);
 game.state.add("game", gameState);
+game.state.add("loadingscreen", loadingScreenState);
 
 game.state.start("boot");
 })(Phaser);

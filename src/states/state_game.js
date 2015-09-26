@@ -1,24 +1,19 @@
-var gameState = {
-	/*
-		method: preload
-		Preloads the level stuff
-	*/
-	preload: function() {
-		// Initialize level groups
-		this.initGroups();
+var gameState = new Phaser.State();
 
-		// Rat test
-		var rat = new Rat(game, 40, 40, Rat.GENDER_MALE, Rat.AGE_OF_CONSENT);
-		this.levelGroup.add(rat);
-		rat = new Rat(game, 80, 40, Rat.GENDER_FEMALE, Rat.AGE_OF_CONSENT);
-		this.levelGroup.add(rat);
-	},
+/*
+	method: init(level)
+	Initializes the level's data
+*/
+gameState.init = function(level) {
+	this.level = level;
+};
 
-	/*
-		method: initGroups
-		Initializes this state's groups (for game objects)
-	*/
-	initGroups: function() {
-		this.levelGroup = new Phaser.Group(game);
-	}
+/*
+	method: create
+	Starts the level
+*/
+gameState.create = function() {
+	// Initialize the level group (for zooming)
+	this.level.initLevel();
+	this.level.scale.set(2);
 };

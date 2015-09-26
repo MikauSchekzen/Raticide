@@ -15,8 +15,11 @@ var bootState = {
 	*/
 	create: function() {
 		// Initialize load event
-		game.load.onFileComplete.add(function(progress, key, success, totalLoadedFiles, totalFiles) {
-			game.state.start("game");
+		game.load.onFileComplete.add(function loadProgress(progress, key, success, totalLoadedFiles, totalFiles) {
+			if(totalLoadedFiles >= totalFiles) {
+				game.load.onFileComplete.remove(loadProgress, this);
+				game.state.start("loadingscreen", true, false, "assets/levels/testlevel.json");
+			}
 		}, this);
 
 		// Prepare list
