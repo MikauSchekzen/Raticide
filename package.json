@@ -8,7 +8,8 @@
   "description": "A small game where you exterminate rats",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "npm run build && electron .",
+    "build": "grunt"
   },
   "devDependencies": {
     "electron": "^0.4.1",
