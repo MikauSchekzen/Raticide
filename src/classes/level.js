@@ -23,6 +23,11 @@ var Level = function(levelObj) {
 			}
 		}
 	})
+
+	// Set up game object groups
+	this.gameObjects = {
+		rats: []
+	};
 };
 Level.prototype = Object.create(Phaser.Sprite.prototype);
 Level.prototype.constructor = Level;
@@ -72,4 +77,29 @@ Level.prototype.initLevel = function() {
 			layer.placeTiles();
 		}
 	}
+
+	// TEST -- REMOVE LATER
+	this.spawnRat(5, 5);
+	this.spawnRat(7, 5);
+	this.spawnRat(5, 6);
+};
+
+/*
+	method: spawnRat(x, y[, gender[, age]])
+	Spawns a rat at the specified coordinates (in tile space)
+*/
+Level.prototype.spawnRat = function(x, y, gender, age) {
+	if(gender === undefined) {
+		gender = Rat.GENDER_FEMALE;
+		if(Math.random() < 0.5) {
+			gender = Rat.GENDER_MALE;
+		}
+	}
+	if(age === undefined) {
+		age = Rat.AGE_OF_CONSENT;
+	}
+
+	var rat = new Rat(game, (x * GameData.tile.width) + (GameData.tile.width * 0.5), (y * GameData.tile.height) + (GameData.tile.height * 0.5), gender, age);
+	this.addChild(rat);
+	this.gameObjects.rats.push(rat);
 };

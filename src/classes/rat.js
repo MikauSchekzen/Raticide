@@ -8,6 +8,9 @@ var Rat = function(game, x, y, gender, age) {
 		gender: gender
 	};
 
+	// Set sprite anchor
+	this.anchor.set(0.5);
+
 	Object.defineProperties(this, {
 		"adult": {
 			get() {
