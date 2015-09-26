@@ -1,5 +1,8 @@
 {
-	"name": "Raticide",
-	"version": "0.0.1",
-	"main": "main.js"
+  "name": "Raticide",
+  "version": "0.0.1",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^0.4.1"
+  }
 }
