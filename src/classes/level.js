@@ -1,5 +1,5 @@
 var Level = function(levelObj) {
-	Phaser.Sprite.call(this, game, 0, 0);
+	Phaser.Group.call(this, game);
 	game.add.existing(this);
 
 	this.rawData = levelObj;
@@ -29,7 +29,7 @@ var Level = function(levelObj) {
 		rats: []
 	};
 };
-Level.prototype = Object.create(Phaser.Sprite.prototype);
+Level.prototype = Object.create(Phaser.Group.prototype);
 Level.prototype.constructor = Level;
 
 /*
@@ -73,7 +73,7 @@ Level.prototype.initLevel = function() {
 	for(a in this.layers) {
 		layer = this.layers[a];
 		if(layer) {
-			this.addChild(layer);
+			this.add(layer);
 			layer.placeTiles();
 		}
 	}
@@ -100,6 +100,6 @@ Level.prototype.spawnRat = function(x, y, gender, age) {
 	}
 
 	var rat = new Rat(game, (x * GameData.tile.width) + (GameData.tile.width * 0.5), (y * GameData.tile.height) + (GameData.tile.height * 0.5), gender, age);
-	this.addChild(rat);
+	this.add(rat);
 	this.gameObjects.rats.push(rat);
 };
