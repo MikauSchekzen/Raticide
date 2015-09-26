@@ -103,3 +103,56 @@ Level.prototype.spawnRat = function(x, y, gender, age) {
 	this.add(rat);
 	this.gameObjects.rats.push(rat);
 };
+
+/**
+ * Translates in-world x, y coördinates to a tile index.
+ *
+ * @param {number} x - The x position.
+ * @param {number} y - The y position.
+ * @returns {number} - The index of the Tile containing the x, y coördinate.
+ */
+Level.prototype.coordsToTile = function(x, y) {
+	var width, tileSize, tileX, tileY;
+
+	width = this.width;
+	tileSize = GameData.tile.width;
+	tileX = Math.floor(x / tileSize);
+	tileY = Math.floor(y / tileSize);
+
+	return tileX + (tileY * width);
+}
+
+/**
+ * Returns a tile relative to the tile at tileIdx. Which tile is returned
+ * depends on the direction passed in.
+ *
+ * @param {string} direction: either "north", "east", "south", or "west".
+ * @returns {Tile}
+ */
+Level.prototype.getRelativeTile = function(tileIdx, direction) {
+	var delta, tile;
+
+	switch (direction) {
+		case "north" || "n":
+			delta = -this.width;
+			break;
+		case "east" || "e":
+			delta = 1;
+			break;
+		case "south" || "s":
+			delta = this.width;
+			break;
+		case "west" || "w":
+			delta = -1;
+			break;
+	}
+
+	tile = tileIdx + delta;
+
+	try {
+		return this.layers.tiles[tile];
+	}
+	catch(e) {
+		return undefined;
+	}
+}
