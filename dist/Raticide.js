@@ -10,7 +10,11 @@ var GameData = {
 	},
 	tile: {
 		width: 24,
-		height: 24
+		height: 24,
+		type: {
+			PATH: 0,
+			WALL: 1
+		}
 	},
 	dir: {
 		base: {
@@ -212,14 +216,25 @@ TileLayer.prototype.getIndexFromPos = function(x, y) {
 	Places a tile
 */
 TileLayer.prototype.placeTile = function(x, y, tileset, tileID) {
+	// Determine data
 	var tilePos = {
 		x: (tileID % tileset.hTileCount),
 		y: Math.floor(tileID / tileset.hTileCount)
 	};
 	var index = this.getIndexFromPos(x, y);
+	// Place tile
 	var tile = new Tile(x, y, tileset, tilePos.x, tilePos.y);
 	this.addChild(tile);
 	this.tiles.splice(index, 1, tile);
+	// Get tile properties
+	var props;
+	if(tileset.rawData.tileproperties && tileset.rawData.tileproperties[tileID]) {
+		props = tileset.rawData.tileproperties[tileID];
+		if(props.type) {
+			tile.type = props.type;
+			console.log("tile type: " + tile.type);
+		}
+	}
 };
 var Tile = function(tileX, tileY, tileset, tilesetX, tilesetY) {
 	Phaser.Sprite.call(this, game, tileX * GameData.tile.width, tileY * GameData.tile.height, tileset.key);
@@ -229,6 +244,9 @@ var Tile = function(tileX, tileY, tileset, tilesetX, tilesetY) {
 
 	// Auto-crop
 	this.crop(this.tileset.getTileCropping(tilesetX, tilesetY));
+
+	// Set tile type
+	this.type = GameData.tile.type.PATH;
 };
 Tile.prototype = Object.create(Phaser.Sprite.prototype);
 Tile.prototype.constructor = Tile;

@@ -68,5 +68,11 @@ TileLayer.prototype.placeTile = function(x, y, tileset, tileID) {
 	this.addChild(tile);
 	this.tiles.splice(index, 1, tile);
 	// Get tile properties
-	// if(tileset.rawData.)
+	var props;
+	if(tileset.rawData.tileproperties && tileset.rawData.tileproperties[tileID]) {
+		props = tileset.rawData.tileproperties[tileID];
+		if(props.type) {
+			tile.type = props.type;
+		}
+	}
 };
