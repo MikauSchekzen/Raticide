@@ -8,6 +8,19 @@ var Rat = function(game, x, y, gender, age) {
 		gender: gender
 	};
 
+	Object.defineProperties(this, {
+		"adult": {
+			get() {
+				return this.age >= Rat.AGE_OF_CONSENT;
+			}
+		},
+		"pregnant": {
+			get() {
+				return this.stats.gender == Rat.GENDER_FEMALE && this.stats.pregnancy.pregnant;
+			}
+		}
+	});
+
 	// Gender specific initialization
 	switch (this.stats.gender) {
 		case Rat.GENDER_FEMALE:
@@ -35,10 +48,6 @@ var Rat = function(game, x, y, gender, age) {
 
 Rat.prototype = Object.create(GameObject.prototype);
 Rat.prototype.constructor = Rat;
-
-Rat.prototype.isAdult = function() {
-  return this.age >= Rat.AGE_OF_CONSENT;
-}
 
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
