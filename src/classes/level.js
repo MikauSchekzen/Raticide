@@ -21,6 +21,16 @@ var Level = function(levelObj) {
 			get() {
 				return this.rawData.height;
 			}
+		},
+		"totalWidth": {
+			get() {
+				return this.width * GameData.tile.width;
+			}
+		},
+		"totalHeight": {
+			get() {
+				return this.height * GameData.tile.height;
+			}
 		}
 	})
 

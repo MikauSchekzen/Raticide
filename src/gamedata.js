@@ -27,5 +27,8 @@ var GameData = {
 		EAST: 2,
 		SOUTH: -1,
 		WEST: -2
+	},
+	camera: {
+		keyboardSpeedMod: 10
 	}
 };

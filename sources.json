@@ -6,6 +6,7 @@
 	"src/classes/tile.js",
 	"src/classes/gameobject.js",
 	"src/classes/rat.js",
+	"src/classes/camera.js",
 	"src/states/state_boot.js",
 	"src/states/state_loadingscreen.js",
 	"src/states/state_game.js",

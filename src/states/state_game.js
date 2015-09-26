@@ -15,5 +15,57 @@ gameState.init = function(level) {
 gameState.create = function() {
 	// Initialize the level group (for zooming)
 	this.level.initLevel();
-	this.level.scale.set(2);
+	this.camera = new Camera(this.level);
+	this.camera.zoomTo(2);
+
+	this.initControls();
+};
+
+/*
+	method: initControls
+	Initializes the controls for this state
+*/
+gameState.initControls = function() {
+	this.keyboard = {
+		w: game.input.keyboard.addKey(Phaser.Keyboard.W),
+		s: game.input.keyboard.addKey(Phaser.Keyboard.S),
+		a: game.input.keyboard.addKey(Phaser.Keyboard.A),
+		d: game.input.keyboard.addKey(Phaser.Keyboard.D)
+	};
+};
+
+/*
+	method: update
+*/
+gameState.update = function() {
+	this.cameraControls();
+};
+
+/*
+	method: cameraControls
+	Update function for camera controls
+*/
+gameState.cameraControls = function() {
+	var moveRel = {
+		x: 0,
+		y: 0,
+		relative: true
+	};
+	if(this.keyboard.w.isDown) {
+		moveRel.y--;
+	}
+	if(this.keyboard.s.isDown) {
+		moveRel.y++;
+	}
+	if(this.keyboard.a.isDown) {
+		moveRel.x--;
+	}
+	if(this.keyboard.d.isDown) {
+		moveRel.x++;
+	}
+
+	moveRel.x *= GameData.camera.keyboardSpeedMod;
+	moveRel.y *= GameData.camera.keyboardSpeedMod;
+
+	this.camera.move(moveRel);
 };
