@@ -36,6 +36,10 @@ var Rat = function(game, x, y, gender, age) {
 Rat.prototype = Object.create(GameObject.prototype);
 Rat.prototype.constructor = Rat;
 
+Rat.prototype.isAdult = function() {
+  return this.age >= Rat.AGE_OF_CONSENT;
+}
+
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
 Rat.AGE_OF_CONSENT = 1200;
