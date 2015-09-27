@@ -72,7 +72,7 @@ TileLayer.prototype.placeTile = function(x, y, tileset, tileID) {
 	if(tileset.rawData.tileproperties && tileset.rawData.tileproperties[tileID]) {
 		props = tileset.rawData.tileproperties[tileID];
 		if(props.type) {
-			tile.type = props.type;
+			tile.type = props.type * 1;
 		}
 	}
 };
