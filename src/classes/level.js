@@ -149,16 +149,16 @@ Level.prototype.getRelativeTile = function(tileIdx, direction) {
 	var delta, tile;
 
 	switch (direction) {
-		case "north" || "n":
+		case GameData.directions.NORTH:
 			delta = -this.width;
 			break;
-		case "east" || "e":
+		case GameData.directions.EAST:
 			delta = 1;
 			break;
-		case "south" || "s":
+		case GameData.directions.SOUTH:
 			delta = this.width;
 			break;
-		case "west" || "w":
+		case GameData.directions.WEST:
 			delta = -1;
 			break;
 	}
