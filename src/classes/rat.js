@@ -1,4 +1,5 @@
 var Rat = function(game, x, y, gender, age) {
+
 	// Inherit from Phaser.Sprite
 	GameObject.call(this, game, x, y, "atlasRats");
 	game.add.existing(this);
@@ -9,8 +10,6 @@ var Rat = function(game, x, y, gender, age) {
 		gender: gender,
 		speed: 40
 	};
-
-	this.direction = 'east';
 
 	// Set sprite anchor
 	this.anchor.set(0.5);
@@ -61,6 +60,9 @@ var Rat = function(game, x, y, gender, age) {
 Rat.prototype = Object.create(GameObject.prototype);
 Rat.prototype.constructor = Rat;
 
+/**
+ * Runs the rat's logic.
+ */
 Rat.prototype.update = function() {
 	var delta = game.time.physicsElapsed;
 
