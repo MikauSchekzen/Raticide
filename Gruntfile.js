@@ -14,10 +14,18 @@ module.exports = function(grunt) {
 				src: sources,
 				dest: "dist/<%= pkg.name %>.js"
 			}
+		},
+
+		watch: {
+			src: {
+				files: ["src/**"],
+				tasks: ["concat"]
+			}
 		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
+	grunt.loadNpmTasks("grunt-contrib-watch");
 
 	grunt.registerTask("default", ["concat"]);
 };
