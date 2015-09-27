@@ -150,7 +150,7 @@ Level.prototype.getRelativeTile = function(tileIdx, direction) {
 	tile = tileIdx + delta;
 
 	try {
-		return this.layers.tiles[tile];
+		return this.layers.tiles.children[tile];
 	}
 	catch(e) {
 		return undefined;
