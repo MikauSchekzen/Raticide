@@ -95,44 +95,57 @@ Rat.prototype.move = function(delta) {
 	if (this.x === this.targetPos.x && this.y === this.targetPos.y) this.targetPos = false;
 }
 
+/**
+ * Decides what direction the rat will be moving in.
+ */
 Rat.prototype.setDirection = function() {
-	var currentDirection, level, nextTile, posIdx, surroundingTiles, choices;
+	var posIdx, choices;
 
 	// If we already have a target, don't do stuff.
 	if (this.targetPos) return;
 
-	choices = ["north", "east", "south", "west"];
-	level = this.level;
-	currentDirection = this.direction;
-	posIdx = level.coordsToTile(this.x, this.y);
+	choices = [-2, -1, 1, 2];
+	posIdx = this.level.coordsToTile(this.x, this.y);
 
-	choices.forEach(function(choice, idx) {
-		var _tile = this.level.getRelativeTile(posIdx, choice);
-		if (!_tile || _tile.type === GameData.tile.type.WALL) choices.splice(idx, 1);
-	}.bind(this));
+	// This makes sure the rat doesn't turn 180 degrees.
+	// This also means that if we make levels with dead ends, this must
+	// be implemented in some other way.
+	if (this.direction) {
+		choices.splice(choices.indexOf(this.direction * -1), 1);
+	}
 
-	this.direction = choices[game.rnd.integerInRange(0, choices.length - 1)];
+	choices = choices.filter(function(direction) {
+		var _tile = this.level.getRelativeTile(posIdx, direction);
+		return _tile && _tile.type === GameData.tile.type.PATH;
+	}, this);
+
+	if (choices.length === 1) {
+		this.direction = choices[0];
+	}
+	else {
+		this.direction = choices[game.rnd.integerInRange(0, choices.length - 1)];
+	}
 
 	switch (this.direction) {
-		case "north":
+		case GameData.directions.NORTH:
 			this.targetPos = {
 				x: this.x,
 				y: this.y - GameData.tile.height
 			};
 			break;
-		case "east":
+		case GameData.directions.EAST:
 			this.targetPos = {
 				x: this.x + GameData.tile.width,
 				y: this.y
 			};
 			break;
-		case "south":
+		case GameData.directions.SOUTH:
 			this.targetPos = {
 				x: this.x,
 				y: this.y + GameData.tile.height
 			};
 			break;
-		case "west":
+		case GameData.directions.WEST:
 			this.targetPos = {
 				x: this.x - GameData.tile.width,
 				y: this.y
