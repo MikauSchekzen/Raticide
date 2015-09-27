@@ -1,12 +1,16 @@
 var Rat = function(game, x, y, gender, age) {
 	// Inherit from Phaser.Sprite
 	GameObject.call(this, game, x, y, "atlasRats");
+	game.add.existing(this);
 
 	// Set base properties
 	this.stats = {
 		age: age,
-		gender: gender
+		gender: gender,
+		speed: 40
 	};
+
+	this.direction = 'east';
 
 	// Set sprite anchor
 	this.anchor.set(0.5);
@@ -20,6 +24,11 @@ var Rat = function(game, x, y, gender, age) {
 		"pregnant": {
 			get() {
 				return this.stats.gender == Rat.GENDER_FEMALE && this.stats.pregnancy.pregnant;
+			}
+		},
+		"level": {
+			get() {
+				return this.game.state.getCurrentState().level;
 			}
 		}
 	});
@@ -51,6 +60,101 @@ var Rat = function(game, x, y, gender, age) {
 
 Rat.prototype = Object.create(GameObject.prototype);
 Rat.prototype.constructor = Rat;
+
+Rat.prototype.update = function() {
+	var delta = game.time.physicsElapsed;
+
+	this.setDirection();
+	this.setAnimation();
+	this.move(delta);
+};
+
+Rat.prototype.setAnimation = function() {
+	this.playAnim(this.direction);
+}
+
+/**
+ * Moves the rat.
+ * @param {number} delta - The time delta since the last update.
+ */
+Rat.prototype.move = function(delta) {
+	if (this.targetPos.x > this.x) {
+		this.x = Math.min(this.x + (delta * this.stats.speed), this.targetPos.x);
+	}
+	else if (this.targetPos.x < this.x) {
+		this.x = Math.max(this.x - (delta * this.stats.speed), this.targetPos.x);
+	}
+	if (this.targetPos.y > this.y) {
+		this.y = Math.min(this.y + (delta * this.stats.speed), this.targetPos.y);
+	}
+	else if (this.targetPos.y < this.y) {
+		this.y = Math.max(this.y - (delta * this.stats.speed), this.targetPos.y);
+	}
+
+	// If the target is reached, unset it.
+	if (this.x === this.targetPos.x && this.y === this.targetPos.y) this.targetPos = false;
+}
+
+Rat.prototype.setDirection = function() {
+	var currentDirection, level, nextTile, posIdx, surroundingTiles, choices;
+
+	// If we already have a target, don't do stuff.
+	if (this.targetPos) return;
+
+	choices = ["north", "east", "south", "west"];
+	level = this.level;
+	currentDirection = this.direction;
+	posIdx = level.coordsToTile(this.x, this.y);
+
+	choices.forEach(function(choice, idx) {
+		var _tile = this.level.getRelativeTile(posIdx, choice);
+		if (!_tile || _tile.type === GameData.tile.type.WALL) choices.splice(idx, 1);
+	}.bind(this));
+
+	this.direction = choices[game.rnd.integerInRange(0, choices.length - 1)];
+
+	switch (this.direction) {
+		case "north":
+			this.targetPos = {
+				x: this.x,
+				y: this.y - GameData.tile.height
+			};
+			break;
+		case "east":
+			this.targetPos = {
+				x: this.x + GameData.tile.width,
+				y: this.y
+			};
+			break;
+		case "south":
+			this.targetPos = {
+				x: this.x,
+				y: this.y + GameData.tile.height
+			};
+			break;
+		case "west":
+			this.targetPos = {
+				x: this.x - GameData.tile.width,
+				y: this.y
+			};
+			break;
+	}
+}
+
+Rat.prototype.chooseNewDirection = function() {
+	var choices = ["north", "east", "south", "west"];
+
+	choices.splice(choices.indexOf(this.direction), 1);
+
+	choices.forEach(function(choice, idx) {
+		var tile = this.level.getRelativeTile(this.level.coordsToTile(this.x, this.y), choice);
+		if (tile && tile.type === GameData.tile.type.WALL) choices.splice(idx, 1);
+	}.bind(this));
+
+	if (choices.length === 1) return choices[0];
+
+	return choices[game.rnd.integerInRange(0, choices.length - 1)];
+}
 
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
