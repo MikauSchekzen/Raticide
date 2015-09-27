@@ -80,6 +80,8 @@ Level.prototype.initLevel = function() {
 
 	// TEST -- REMOVE LATER
 	this.spawnRat(5, 5);
+	this.spawnRat(9, 9);
+	this.spawnRat(15, 9);
 };
 
 /*
