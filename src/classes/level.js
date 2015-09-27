@@ -121,6 +121,24 @@ Level.prototype.coordsToTile = function(x, y) {
 }
 
 /**
+ * Translates a tile index to in-world x, y coördinates.
+ *
+ * @param {number} idx - The tile index.
+ * @param {bool} center - Make this true if you want the center coordinates.
+ * @returns {object}
+ */
+Level.prototype.tileToCoords = function(idx, center) {
+	var x, y;
+
+	center = center || false;
+
+	x = (idx % this.width) * GameData.tile.width;
+	y = Math.floor(idx / this.width) * GameData.tile.height;
+
+	return {x: x, y: y};
+}
+
+/**
  * Returns a tile relative to the tile at tileIdx. Which tile is returned
  * depends on the direction passed in.
  *
