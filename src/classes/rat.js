@@ -70,7 +70,20 @@ Rat.prototype.update = function() {
 };
 
 Rat.prototype.setAnimation = function() {
-	this.playAnim(this.direction);
+	switch (this.direction) {
+		case GameData.directions.NORTH:
+			this.playAnim("north");
+			break;
+		case GameData.directions.EAST:
+			this.playAnim("east");
+			break;
+		case GameData.directions.SOUTH:
+			this.playAnim("south");
+			break;
+		case GameData.directions.WEST:
+			this.playAnim("west");
+			break;
+	}
 }
 
 /**
