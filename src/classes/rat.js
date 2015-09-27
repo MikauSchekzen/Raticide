@@ -141,21 +141,6 @@ Rat.prototype.setDirection = function() {
 	}
 }
 
-Rat.prototype.chooseNewDirection = function() {
-	var choices = ["north", "east", "south", "west"];
-
-	choices.splice(choices.indexOf(this.direction), 1);
-
-	choices.forEach(function(choice, idx) {
-		var tile = this.level.getRelativeTile(this.level.coordsToTile(this.x, this.y), choice);
-		if (tile && tile.type === GameData.tile.type.WALL) choices.splice(idx, 1);
-	}.bind(this));
-
-	if (choices.length === 1) return choices[0];
-
-	return choices[game.rnd.integerInRange(0, choices.length - 1)];
-}
-
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
 Rat.AGE_OF_CONSENT = 1200;
