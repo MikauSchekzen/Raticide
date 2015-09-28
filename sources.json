@@ -1,6 +1,7 @@
 [
 	"src/gamedata.js",
 	"src/classes/database/db_tileset.js",
+	"src/classes/gui/gui.js",
 	"src/classes/level.js",
 	"src/classes/tilelayer.js",
 	"src/classes/tile.js",
