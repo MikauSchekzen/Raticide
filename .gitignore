@@ -2,3 +2,4 @@ node_modules/
 **/build.rb
 **/Raticide.sublime*
 dist/*
+**/*.swp
