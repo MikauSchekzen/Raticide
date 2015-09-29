@@ -17,8 +17,12 @@ gameState.create = function() {
 	this.level.initLevel();
 	this.camera = new Camera(this.level);
 	this.camera.zoomTo(2);
-
+	
+	// Initialize controls
 	this.initControls();
+
+	// Initialize GUI
+	this.initGUI();
 };
 
 /*
@@ -68,4 +72,15 @@ gameState.cameraControls = function() {
 	moveRel.y *= GameData.camera.keyboardSpeedMod;
 
 	this.camera.move(moveRel);
+};
+
+/*
+	method: initGUI
+	Initializes GUI group
+*/
+gameState.initGUI = function() {
+	this.guiGroup = game.add.group(game.stage);
+
+	// Create test frame
+	var frame = new GUI_Frame(game.camera.width - 200, 0, 200, 300);
 };

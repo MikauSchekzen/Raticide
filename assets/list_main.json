@@ -1,5 +1,9 @@
 {
 	"images": [
+		{
+			"key": "sprGUI_Frame",
+			"url": "assets/gfx/images/guiFrame.png"
+		}
 	],
 	"atlases": [
 		{

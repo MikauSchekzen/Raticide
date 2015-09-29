@@ -1,10 +1,11 @@
 var GUI_Base = function() {
+	Phaser.Sprite.call(this, game, 0, 0);
 	game.add.existing(this);
-	game.stage.add(this);
+	game.state.getCurrentState().guiGroup.add(this);
 
 	// Set base GUI properties
-	this._width = 0;
-	this._height = 0;
+	this.width = 0;
+	this.height = 0;
 	this.x = 0;
 	this.y = 0;
 
@@ -34,35 +35,19 @@ var GUI_Base = function() {
 			get() {
 				return this.y;
 			}
-		},
-		"width": {
-			get() {
-				return this._width;
-			},
-			set(val) {
-				this._width = val;
-				this.postResize();
-			}
-		},
-		"height": {
-			get() {
-				return this._height;
-			},
-			set(val) {
-				this._height = val;
-				this.postResize();
-			}
 		}
 	});
 };
-GUI_Base.prototype = Object.create(Phaser.Image.prototype);
+GUI_Base.prototype = Object.create(Phaser.Sprite.prototype);
 GUI_Base.prototype.constructor = GUI_Base;
 
 /*
-	method: postResize
-	Automatically called after the width or height is adjusted
+	method: resize(width, height)
+	Resizes this GUI element
 */
-GUI_Base.prototype.postResize = function() {
+GUI_Base.prototype.resize = function(width, height) {
+	this.width = width;
+	this.height = height;
 	this.updateClickBox();
 };
 
@@ -79,6 +64,9 @@ GUI_Base.prototype.updateClickBox = function() {
 	Returns true if the mouse is currently over this GUI element
 */
 GUI_Base.prototype.mouseOver = function() {
+	if(!this.hitArea) {
+		return false;
+	}
 	var cursor = game.input.activePointer;
 	return (cursor.x >= this.hitArea.x && cursor.x <= this.hitArea.right &&
 					cursor.y >= this.hitArea.y && cursor.y <= this.hitArea.bottom);
