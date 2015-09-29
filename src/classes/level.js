@@ -42,6 +42,24 @@ var Level = function(levelObj) {
 Level.prototype = Object.create(Phaser.Group.prototype);
 Level.prototype.constructor = Level;
 
+Level.prototype.update = function() {
+	// Super
+	Phaser.Group.prototype.update.call(this);
+
+	var rats = this.gameObjects.rats;
+
+	rats.forEach(function(rat, idx) {
+		if (rat.stats.gender === Rat.GENDER_MALE) {
+			for (var _i = idx + 1; _i < rats.length; _i++) {
+				debugger;
+				if (game.physics.arcade.overlap(rat, rats[_i])) {
+					rat.makeLove(rats[_i]);
+				}
+			}
+		}
+	});
+}
+
 /*
 	method: loadLevelFiles
 	Loads all the required level files (tilesets and audio, mostly)
