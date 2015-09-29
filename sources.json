@@ -11,5 +11,5 @@
 	"src/states/state_boot.js",
 	"src/states/state_loadingscreen.js",
 	"src/states/state_game.js",
-	"src/game.js"
+	"src/game.js"	
 ]
