@@ -107,7 +107,8 @@ Level.prototype.initLevel = function() {
 	}
 
 	// TEST -- REMOVE LATER
-	this.spawnRat(205);
+	this.spawnRat(205, Rat.GENDER_MALE);
+	this.spawnRat(211, Rat.GENDER_FEMALE);
 };
 
 /**
