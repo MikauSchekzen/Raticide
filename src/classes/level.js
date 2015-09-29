@@ -99,17 +99,13 @@ Level.prototype.initLevel = function() {
 	Spawns a rat at the specified coordinates (in tile space)
 */
 Level.prototype.spawnRat = function(x, y, gender, age) {
-	if(gender === undefined) {
-		gender = Rat.GENDER_FEMALE;
-		if(Math.random() < 0.5) {
-			gender = Rat.GENDER_MALE;
-		}
-	}
-	if(age === undefined) {
-		age = Rat.AGE_OF_CONSENT;
-	}
+	var rat;
 
-	var rat = new Rat(game, (x * GameData.tile.width) + (GameData.tile.width * 0.5), (y * GameData.tile.height) + (GameData.tile.height * 0.5), gender, age);
+	gender = gender || Math.random() < 0.5 ? Rat.GENDER_MALE : Rat.GENDER_FEMALE;
+	age = age || Rat.AGE_OF_CONSENT;
+
+	rat = new Rat(game, (x * GameData.tile.width) + (GameData.tile.width * 0.5), (y * GameData.tile.height) + (GameData.tile.height * 0.5), gender, age);
+
 	this.add(rat);
 	this.gameObjects.rats.push(rat);
 };
