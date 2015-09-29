@@ -3,6 +3,7 @@ var Rat = function(game, x, y, gender, age) {
 	// Inherit from Phaser.Sprite
 	GameObject.call(this, game, x, y, "atlasRats");
 	game.add.existing(this);
+	game.physics.enable(this, Phaser.Physics.ARCADE);
 
 	// Set base properties
 	this.stats = {
