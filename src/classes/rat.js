@@ -11,6 +11,8 @@ var Rat = function(game, x, y, gender, age) {
 		speed: 40
 	};
 
+	this.paused = false;
+
 	// Set sprite anchor
 	this.anchor.set(0.5);
 
@@ -60,15 +62,26 @@ var Rat = function(game, x, y, gender, age) {
 Rat.prototype = Object.create(GameObject.prototype);
 Rat.prototype.constructor = Rat;
 
+Rat.prototype.pause = function(timeout) {
+	this.paused = true;
+	this.game.time.events.add(timeout, this.unpause.bind(this));
+}
+
+Rat.prototype.unpause = function() {
+	this.paused = false;
+}
+
 /**
  * Runs the rat's logic.
  */
 Rat.prototype.update = function() {
 	var delta = game.time.physicsElapsed;
 
-	this.setDirection();
-	this.setAnimation();
-	this.move(delta);
+	if (!this.paused) {
+		this.setDirection();
+		this.setAnimation();
+		this.move(delta);
+	}
 };
 
 Rat.prototype.setAnimation = function() {
