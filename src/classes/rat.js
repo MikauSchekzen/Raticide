@@ -185,6 +185,31 @@ Rat.prototype.setDirection = function() {
 	}
 }
 
+Rat.prototype.makeLove = function(otherRat) {
+	if (this.stats.gender === Rat.GENDER_MALE &&        // This rat must be male.
+			otherRat.stats.gender === Rat.GENDER_FEMALE &&	// The other rat must be female.
+			!otherRat.stats.pregnant &&										  // The female mustn't be pregnant.
+			otherRat.stats.fertile) {											  // The female must be fertile.
+		this.pause(2000);
+		otherRat.pause(2000);
+		otherRat.stats.pregnant = true;
+		this.game.time.events.add(Rat.GESTATION_PERIOD, otherRat.giveBirth.bind(otherRat));
+	}
+}
+
+/**
+ * Spawns a baby rat.
+ *
+ * @parameter {integer} gender - The gender for the baby (0 = male, 1 = female).
+ */
+Rat.prototype.giveBirth = function(gender) {
+	// Default value for the baby's gender.
+	if (!gender) gender = Math.random() > 0.5 ? "male" : "female";
+
+	this.level.spawnRat(this.level.coordsToTile(this.x, this.y, gender, 0));
+	this.stats.pregnant = false;
+}
+
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
 Rat.AGE_OF_CONSENT = 1200;
