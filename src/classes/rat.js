@@ -9,7 +9,9 @@ var Rat = function(game, x, y, gender, age) {
 	this.stats = {
 		age: age,
 		gender: gender,
-		speed: 40
+		speed: 40,
+		pregnant: false,
+		fertile: true
 	};
 
 	this.paused = false;
@@ -186,3 +188,4 @@ Rat.prototype.setDirection = function() {
 Rat.GENDER_MALE = 0;
 Rat.GENDER_FEMALE = 1;
 Rat.AGE_OF_CONSENT = 1200;
+Rat.GESTATION_PERIOD = 5000;
