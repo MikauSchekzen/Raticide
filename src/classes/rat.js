@@ -46,11 +46,6 @@ var Rat = function(game, x, y, gender, age) {
 			this.addAnim("west", ["female_w.png"]);
 			this.addAnim("east", ["female_e.png"]);
 			this.playAnim("south");
-			// Set female stats
-			this.stats.pregnancy = {
-				pregnant: false,
-				pregnantTime: 0
-			};
 			break;
 		case Rat.GENDER_MALE:
 			// Set male sprites
