@@ -89,22 +89,25 @@ Level.prototype.initLevel = function() {
 	}
 
 	// TEST -- REMOVE LATER
-	this.spawnRat(5, 5);
-	this.spawnRat(9, 9);
-	this.spawnRat(15, 9);
+	this.spawnRat(205);
 };
 
-/*
-	method: spawnRat(x, y[, gender[, age]])
-	Spawns a rat at the specified coordinates (in tile space)
-*/
-Level.prototype.spawnRat = function(x, y, gender, age) {
-	var rat;
+/**
+ * Spawns a rat.
+ *
+ * @param {integer} idx - The index of the tile to spawn the rat at.
+ * @param {integer} gender - The gender of the rat.
+ * @param {integer} age - The rat's age.
+ */
+Level.prototype.spawnRat = function(idx, gender, age) {
+	var rat, coords;
 
+	// Default values for gender and age.
 	gender = gender || Math.random() < 0.5 ? Rat.GENDER_MALE : Rat.GENDER_FEMALE;
 	age = age || Rat.AGE_OF_CONSENT;
 
-	rat = new Rat(game, (x * GameData.tile.width) + (GameData.tile.width * 0.5), (y * GameData.tile.height) + (GameData.tile.height * 0.5), gender, age);
+	coords = this.tileToCoords(idx, true);
+	rat = new Rat(game, coords.x, coords.y, gender, age);
 
 	this.add(rat);
 	this.gameObjects.rats.push(rat);
@@ -142,6 +145,11 @@ Level.prototype.tileToCoords = function(idx, center) {
 
 	x = (idx % this.width) * GameData.tile.width;
 	y = Math.floor(idx / this.width) * GameData.tile.height;
+
+	if (center) {
+		x = x + GameData.tile.width / 2;
+		y = y + GameData.tile.height / 2;
+	}
 
 	return {x: x, y: y};
 }
