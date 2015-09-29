@@ -122,8 +122,8 @@ Level.prototype.spawnRat = function(idx, gender, age) {
 	var rat, coords;
 
 	// Default values for gender and age.
-	gender = gender || Math.random() < 0.5 ? Rat.GENDER_MALE : Rat.GENDER_FEMALE;
-	age = age || Rat.AGE_OF_CONSENT;
+	if (typeof gender === "undefined") gender = Math.random() < 0.5 ? Rat.GENDER_MALE : Rat.GENDER_FEMALE;
+	if (typeof age === "undefined") age = Rat.AGE_OF_CONSENT;
 
 	coords = this.tileToCoords(idx, true);
 	rat = new Rat(game, coords.x, coords.y, gender, age);
