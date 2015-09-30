@@ -1,6 +1,7 @@
 [
 	"src/gamedata.js",
 	"src/classes/database/db_tileset.js",
+	"src/classes/gui/9patch.js",
 	"src/classes/gui/gui.js",
 	"src/classes/gui/gui_frame.js",
 	"src/classes/level.js",

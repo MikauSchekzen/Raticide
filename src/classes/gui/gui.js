@@ -1,13 +1,6 @@
 var GUI_Base = function() {
-	Phaser.Sprite.call(this, game, 0, 0);
-	game.add.existing(this);
+	Phaser.Group.call(this, game);
 	game.state.getCurrentState().guiGroup.add(this);
-
-	// Set base GUI properties
-	this.width = 0;
-	this.height = 0;
-	this.x = 0;
-	this.y = 0;
 
 	// Define properties
 	Object.defineProperties(this, {
@@ -15,30 +8,10 @@ var GUI_Base = function() {
 			get() {
 				return game.state.getCurrentState();
 			}
-		},
-		"right": {
-			get() {
-				return this.x + this.width;
-			}
-		},
-		"bottom": {
-			get() {
-				return this.y + this.height;
-			}
-		},
-		"left": {
-			get() {
-				return this.x;
-			}
-		},
-		"top": {
-			get() {
-				return this.y;
-			}
 		}
 	});
 };
-GUI_Base.prototype = Object.create(Phaser.Sprite.prototype);
+GUI_Base.prototype = Object.create(Phaser.Group.prototype);
 GUI_Base.prototype.constructor = GUI_Base;
 
 /*

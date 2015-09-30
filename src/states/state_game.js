@@ -82,5 +82,5 @@ gameState.initGUI = function() {
 	this.guiGroup = game.add.group(game.stage);
 
 	// Create test frame
-	var frame = new GUI_Frame(game.camera.width - 200, 0, 200, 300);
+	var frame = new GUI_Frame(0, 0, 200, 300);
 };
